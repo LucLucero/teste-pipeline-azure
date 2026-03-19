@@ -16,7 +16,11 @@ steps:
   displayName: 'Instalar dependências'
 
 - script: |
-    pytest tests --junitxml=test-results.xml
+    pwd
+    ls -R
+    export PYTHONPATH=$PWD
+    python -m pytest tests --junitxml=test-results.xml -v
+  workingDirectory: $(System.DefaultWorkingDirectory)
   displayName: 'Executar testes'
 
 - task: PublishTestResults@2
