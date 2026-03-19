@@ -1,0 +1,27 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.13'
+  displayName: 'Usar Python 3.13'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Instalar dependências'
+
+- script: |
+    pytest tests --junitxml=test-results.xml
+  displayName: 'Executar testes'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: 'test-results.xml'
+    testRunTitle: 'Testes Python'
+  displayName: 'Publicar resultados dos testes'
